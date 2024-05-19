@@ -10,10 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
-from pathlib import Path
+import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-g%u9d5k$vv(us$i+k!7_=3cy%7agv^gf12#!&)3v5ugt_n2w1@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'monitoring.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get("MEASUREMENTS_DB", "places_db"),
+        'USER': os.environ.get("MEASUREMENTS_DB_USER", "places_user"),
+        'PASSWORD': os.environ.get("MEASUREMENTS_DB_PASSWD", "isis2503"),
+        'HOST': os.environ.get("MEASUREMENTS_DB_HOST", "10.128.0.86"),
+        'PORT': os.environ.get("MEASUREMENTS_DB_PORT", "5432")
     }
 }
 
